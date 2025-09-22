@@ -153,6 +153,8 @@ class ComandaController extends Controller
     public function generarCuenta(Comanda $comanda)
     {
         $comanda->load('productos', 'mesa');
+        $comanda->cuenta_generada = true;
+        $comanda->save();
 
         $total = 0;
         foreach ($comanda->productos as $producto) {
