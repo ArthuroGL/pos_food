@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,6 +6,232 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+
+    /* Paleta Gastronómica Optimizada (Inspiración Delivery Moderno) */
+    --color-brand-bg: #f8fafc;         /* Gris/Azulado ultra claro para el fondo */
+    --color-brand-panel: #ffffff;      /* Paneles y tarjetas puras blancas */
+    --color-brand-border: #f1f5f9;     /* Bordes muy suaves */
+    --color-brand-text: #0f172a;       /* Texto principal legible y oscuro */
+    --color-brand-muted: #64748b;      /* Gris medio para etiquetas o textos secundarios */
+
+    /* Colores de Estado, Alimentos y Acción */
+    --color-brand-primary: #f97316;    /* Naranja Cálido Sutil (Base del sistema) */
+    --color-brand-primary-hover: #ea580c;
+    --color-brand-secondary: #fff7ed;  /* Fondo naranja/amarillo pastel suave */
+    --color-brand-success: #10b981;
+    --color-brand-danger: #f43f5e;
+    --color-brand-warning: #f59e0b;
+    --color-brand-info: #3b82f6;
+
+    /* Sistema Visual */
+    --radius-brand-lg: 0.75rem;
+    --radius-brand-md: 0.5rem;
+}
+
+@layer base {
+    body {
+        font-family: "Geist", sans-serif;
+        /* Cambiado a fondo claro con tipografía oscura de alta legibilidad */
+        @apply bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white select-none;
+    }
+
+    html,
+    body {
+        overscroll-behavior-y: contain;
+    }
+}
+
+@layer components {
+    /* ==========================================
+       BOTONES (Buttons)
+       ========================================== */
+    .btn-primary {
+        /* Ahora usa el naranja identitario de la plataforma */
+        @apply inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs rounded-lg transition-all shadow-xs cursor-pointer active:scale-95;
+    }
+    .btn-secondary {
+        @apply inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-lg transition-all border border-slate-200 shadow-xs cursor-pointer;
+    }
+    .btn-danger {
+        @apply inline-flex items-center gap-2 h-9 px-3 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold text-xs rounded-xl transition-all cursor-pointer;
+    }
+    .btn-nav-item {
+        @apply px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900 flex items-center gap-1.5;
+    }
+    .btn-nav-item-active {
+        @apply px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-orange-500 text-white shadow-xs flex items-center gap-1.5;
+    }
+    /* ==========================================
+       BOTÓN UNIVERSAL DE REGRESO (Back Navigation)
+       ========================================== */
+    .btn-back-nav {
+        @apply inline-flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-600 hover:text-slate-900 font-black text-xs uppercase tracking-wider rounded-xl border border-slate-200 shadow-xs transition-all duration-200 cursor-pointer active:scale-95 select-none;
+    }
+
+    /* Efecto de animación sutil para la flecha interna al hacer hover */
+    .btn-back-nav:hover i {
+        @apply -translate-x-0.5;
+    }
+
+    .btn-back-nav i {
+        @apply transition-transform duration-200 text-[10px];
+    }
+
+    /* ==========================================
+       CONTENEDORES Y PANELES (Cards & Panels Claro)
+       ========================================== */
+    .panel-base {
+        @apply bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm;
+    }
+    .card-kanban {
+        @apply bg-slate-50 border border-slate-200/60 rounded-xl p-3 transition-all hover:border-orange-200 hover:bg-orange-50/20;
+    }
+
+    /* ==========================================
+       FORMULARIOS E INPUTS
+       ========================================== */
+    .form-control {
+        @apply w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all;
+    }
+    .form-label {
+        @apply block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wider;
+    }
+
+    /* ==========================================
+       TABLAS (Tables Claras)
+       ========================================== */
+    .table-responsive {
+        @apply overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-xs;
+    }
+    .table-custom {
+        @apply w-full text-left border-collapse text-sm;
+    }
+    .table-custom th {
+        @apply bg-slate-50 border-b border-slate-200 px-4 py-3 font-black text-slate-500 text-xs uppercase tracking-wider;
+    }
+    .table-custom td {
+        @apply border-b border-slate-100 px-4 py-3 text-slate-700;
+    }
+
+    /* ==========================================
+       BADGES Y ESTADOS
+       ========================================== */
+    .badge-success {
+        @apply inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black tracking-wide uppercase bg-emerald-50 text-emerald-700 border border-emerald-200;
+    }
+    .badge-danger {
+        @apply inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black tracking-wide uppercase bg-rose-50 text-rose-700 border border-rose-200;
+    }
+    .badge-warning {
+        @apply inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black tracking-wide uppercase bg-amber-50 text-amber-700 border border-amber-200;
+    }
+    .badge-info {
+        @apply inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black tracking-wide uppercase bg-blue-50 text-blue-700 border border-blue-200;
+    }
+
+    /* Indicador de transmisión/Live status */
+    .status-indicator-container {
+        @apply hidden sm:flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1.5 border border-slate-200;
+    }
+    .status-dot-ping {
+        @apply animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75;
+    }
+    .status-dot-core {
+        @apply relative inline-flex rounded-full h-1.5 w-1.5 bg-orange-500;
+    }
+
+    /* ==========================================
+       DOCUMENTOS Y UTILS
+       ========================================== */
+    .preview-doc-container {
+        @apply border border-slate-200 rounded-xl bg-slate-50 p-4 flex flex-col items-center justify-center min-h-[200px];
+    }
+    .pdf-wrapper {
+        @apply w-full aspect-[1/1.414] rounded-lg overflow-hidden border border-slate-200 bg-white;
+    }
+    .sheet-layout {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .sheet-layout::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* ==========================================
+       PESTAÑAS DE MONITOREO (Tabs)
+       ========================================== */
+    .tab-container {
+        @apply mb-6 bg-slate-200/60 p-1 rounded-xl flex gap-1 overflow-x-auto;
+    }
+    .tab-btn-pos {
+        @apply flex-1 text-center py-3 px-4 rounded-lg font-black text-xs tracking-wider uppercase transition-all border-0 cursor-pointer whitespace-nowrap bg-transparent text-slate-600;
+    }
+    .tab-btn-pos.active {
+        @apply bg-white text-slate-900 shadow-xs;
+    }
+
+    /* Scroll personalizado */
+    .scroll-custom::-webkit-scrollbar {
+        width: 4px;
+    }
+    .scroll-custom::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .scroll-custom::-webkit-scrollbar-thumb {
+        @apply bg-slate-300 rounded-full;
+    }
+
+    /* ==========================================================================
+       SISTEMA DE NAVEGACIÓN OPERATIVA PLANA (MÁXIMA NITIDEZ)
+       ========================================================================== */
+
+    /* Contenedor Lateral - Sólido, Fondo Blanco Puro, Bordes Claros */
+    .pos-sidebar {
+        @apply fixed top-0 bottom-0 left-0 z-20 w-72 bg-white border-r border-slate-200 flex flex-col justify-between transition-transform duration-300 md:translate-x-0;
+    }
+
+    /* Encabezados de Módulo */
+    .pos-sidebar-header {
+        @apply block text-[11px] font-black tracking-widest text-slate-400 uppercase mb-2 px-3 mt-5;
+    }
+
+    /* Links del Menú - Texto Oscuro */
+    .pos-sidebar-link {
+        @apply flex items-center gap-3.5 px-4 py-3 rounded-xl text-xs font-black tracking-wide uppercase transition-colors no-underline text-slate-700 hover:bg-orange-50/60 hover:text-orange-600 border border-transparent;
+    }
+
+    /* Estado Activo - Naranja Cálido Tipo Delivery */
+    .pos-sidebar-link-active {
+        @apply flex items-center gap-3.5 px-4 py-3 rounded-xl text-xs font-black tracking-wide uppercase no-underline bg-orange-500 text-white relative overflow-hidden shadow-sm shadow-orange-500/20;
+    }
+
+    .pos-sidebar-link-active::before {
+        content: "";
+        @apply absolute left-0 top-2 bottom-2 w-1 bg-white rounded-r-full;
+    }
+
+    /* Botón Salir Sólido */
+    .pos-sidebar-link-danger {
+        @apply flex items-center gap-3.5 px-4 py-3 rounded-xl text-xs font-black tracking-wide uppercase transition-colors no-underline text-rose-600 hover:bg-rose-50 border border-transparent;
+    }
+
+    /* Navbar Superior */
+    .pos-navbar {
+        @apply fixed top-0 right-0 z-10 flex h-20 w-full items-center justify-between border-b border-slate-200 bg-white px-6 box-border transition-all duration-300 ease-in-out;
+    }
+
+    /* Clases de Soporte Operativo con tonos Pastel Amigables */
+    .badge-rol-admin {
+        @apply bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md;
+    }
+    .badge-rol-cocina {
+        @apply bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md;
+    }
+    .badge-rol-mesero {
+        @apply bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md;
+    }
 }

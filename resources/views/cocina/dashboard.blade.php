@@ -1,8 +1,5 @@
 @extends('layouts.app')
-
 @section('title', 'Panel de Meseros')
-
-
 @section('content_header', 'Panel de Control')
 @section('content')
 <div class="row">

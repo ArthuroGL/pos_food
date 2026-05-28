@@ -31,11 +31,13 @@ Route::controller(ComandaController::class)->group(function () {
     // CRUD básico
     Route::get('/comandas', 'index')->name('comandas.index');
     Route::get('/comandas/create', 'create')->name('comandas.create');
+    Route::get('/productos/sugerencias', 'sugerencias')->name('productos.sugerencias');
     Route::post('/comandas', 'store')->name('comandas.store');
     Route::get('/comandas/{comanda}/edit', 'edit')->name('comandas.edit');
     Route::put('/comandas/{comanda}', 'update')->name('comandas.update');
     Route::delete('/comandas/{comanda}', 'destroy')->name('comandas.destroy');
     Route::put('/comandas/{comanda}/producto/{producto}/estado', 'marcarProductoPreparado')->name('comandas.producto.estado');
+
 
     // Gestión de estados
     Route::prefix('/comandas/{comanda}')->group(function () {

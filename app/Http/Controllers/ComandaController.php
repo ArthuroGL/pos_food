@@ -36,6 +36,24 @@ class ComandaController extends Controller
 
         return view('comandas.create', compact('productos', 'mesas'));
     }
+    public function sugerencias(Request $request)
+    {
+        $search = $request->input('search');
+
+        if (empty($search)) {
+            return response()->json([]);
+        }
+
+        // Buscamos coincidencias parciales e insensibles a mayúsculas/minúsculas (ilike)
+        $sugerencias = Producto::where('nombre', 'ilike', "%{$search}%")
+            ->orWhere('descripcion', 'ilike', "%{$search}%")
+            ->orderBy('nombre')
+            ->take(5) // Tomamos un top de hasta 5 para mantener el dropdown compacto y rápido
+            ->select('id', 'nombre')
+            ->get();
+
+        return response()->json($sugerencias);
+    }
     public function store(Request $request)
     {
         $request->validate([
