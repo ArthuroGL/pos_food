@@ -8,11 +8,11 @@ $currentRoute = Route::currentRouteName();
 
     {{-- Botón Flotante / Semi-integrado de Cierre (Estilo POS Moderno) --}}
 
-<button onclick="togglePosSidebar()"
+    <button onclick="togglePosSidebar()"
         id="pos-sidebar-close-trigger"
         class="absolute top-6 -right-4 h-8 w-8 rounded-full bg-white border border-slate-200 text-slate-500 hover:text-orange-600 shadow-md hover:shadow-lg flex items-center justify-center cursor-pointer transition-all duration-300 z-50 hover:scale-105 active:scale-95 group focus:outline-none hidden">
-    <i id="pos-collapse-icon" class="fas fa-chevron-left text-xs transition-transform duration-300"></i>
-</button>
+        <i id="pos-collapse-icon" class="fas fa-chevron-left text-xs transition-transform duration-300"></i>
+    </button>
 
     <div class="flex flex-col flex-1 px-4 py-6 overflow-y-auto">
 
@@ -36,9 +36,17 @@ $currentRoute = Route::currentRouteName();
         {{-- Operador Activo --}}
         <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl mb-5 shrink-0">
             <div class="relative shrink-0">
-                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-200 text-slate-700 font-black text-sm">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                </span>
+                <div class="flex h-10 w-10 items-center justify-center rounded-lg overflow-hidden bg-slate-200 text-slate-700">
+                    @if(Auth::user()->foto_de_perfil)
+                    <img src="{{ asset('storage/' . Auth::user()->foto_de_perfil) }}"
+                        alt="{{ Auth::user()->name }}"
+                        class="h-full w-full object-cover">
+                    @else
+                    <span class="font-black text-sm font-mono">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                    </span>
+                    @endif
+                </div>
                 <span class="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white"></span>
             </div>
             <div class="min-w-0 flex-1">
@@ -169,75 +177,75 @@ $currentRoute = Route::currentRouteName();
 
 <script>
     function togglePosSidebar() {
-    const sidebar = document.getElementById('pos-sidebar-container');
-    const navbar = document.getElementById('pos-navbar');
-    const mainContent = document.getElementById('main-content');
-    const overlay = document.getElementById('sidebar-overlay');
-    const closeTrigger = document.getElementById('pos-sidebar-close-trigger');
-    const collapseIcon = document.getElementById('pos-collapse-icon');
-    const isMobile = window.innerWidth < 768;
+        const sidebar = document.getElementById('pos-sidebar-container');
+        const navbar = document.getElementById('pos-navbar');
+        const mainContent = document.getElementById('main-content');
+        const overlay = document.getElementById('sidebar-overlay');
+        const closeTrigger = document.getElementById('pos-sidebar-close-trigger');
+        const collapseIcon = document.getElementById('pos-collapse-icon');
+        const isMobile = window.innerWidth < 768;
 
-    if (isMobile) {
-        // --- MÓVIL (Comportamiento Drawer clásico) ---
-        if (sidebar.classList.contains('-translate-x-full')) {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.add('opacity-100'), 10);
-            document.body.style.overflow = 'hidden';
+        if (isMobile) {
+            // --- MÓVIL (Comportamiento Drawer clásico) ---
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+                document.body.style.overflow = 'hidden';
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+                document.body.style.overflow = '';
+            }
         } else {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.remove('opacity-100');
-            setTimeout(() => overlay.classList.add('hidden'), 300);
-            document.body.style.overflow = '';
-        }
-    } else {
-        // --- DESKTOP / TABLETS (Ajuste estructural dinámico) ---
-        if (sidebar.classList.contains('md:translate-x-0')) {
-            // COLAPSAR MENÚ
-            sidebar.classList.remove('md:translate-x-0');
-            sidebar.classList.add('md:-translate-x-full');
+            // --- DESKTOP / TABLETS (Ajuste estructural dinámico) ---
+            if (sidebar.classList.contains('md:translate-x-0')) {
+                // COLAPSAR MENÚ
+                sidebar.classList.remove('md:translate-x-0');
+                sidebar.classList.add('md:-translate-x-full');
 
-            navbar.classList.remove('md:w-[calc(100%-18rem)]');
-            navbar.classList.add('w-full');
+                navbar.classList.remove('md:w-[calc(100%-18rem)]');
+                navbar.classList.add('w-full');
 
-            mainContent.classList.remove('md:pl-72');
-            mainContent.classList.add('md:pl-0');
+                mainContent.classList.remove('md:pl-72');
+                mainContent.classList.add('md:pl-0');
 
-            // OCULTAR la flecha flotante por completo al cerrar
-            if (closeTrigger) {
-                closeTrigger.classList.add('hidden');
-                closeTrigger.classList.remove('md:flex');
+                // OCULTAR la flecha flotante por completo al cerrar
+                if (closeTrigger) {
+                    closeTrigger.classList.add('hidden');
+                    closeTrigger.classList.remove('md:flex');
+                }
+
+                // Ocultar overlay en escritorio de forma limpia
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            } else {
+                // EXPANDIR MENÚ
+                sidebar.classList.remove('md:-translate-x-full');
+                sidebar.classList.add('md:translate-x-0');
+
+                navbar.classList.remove('w-full');
+                navbar.classList.add('md:w-[calc(100%-18rem)]');
+
+                mainContent.classList.remove('md:pl-0');
+                mainContent.classList.add('md:pl-72');
+
+                // MOSTRAR la flecha flotante cuando el menú está visible
+                if (closeTrigger) {
+                    closeTrigger.classList.remove('hidden');
+                    closeTrigger.classList.add('md:flex');
+                }
+                if (collapseIcon) {
+                    collapseIcon.classList.remove('rotate-180');
+                }
+
+                // Activar overlay sutil para permitir el clic de cierre externo
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
             }
-
-            // Ocultar overlay en escritorio de forma limpia
-            overlay.classList.remove('opacity-100');
-            setTimeout(() => overlay.classList.add('hidden'), 300);
-        } else {
-            // EXPANDIR MENÚ
-            sidebar.classList.remove('md:-translate-x-full');
-            sidebar.classList.add('md:translate-x-0');
-
-            navbar.classList.remove('w-full');
-            navbar.classList.add('md:w-[calc(100%-18rem)]');
-
-            mainContent.classList.remove('md:pl-0');
-            mainContent.classList.add('md:pl-72');
-
-            // MOSTRAR la flecha flotante cuando el menú está visible
-            if (closeTrigger) {
-                closeTrigger.classList.remove('hidden');
-                closeTrigger.classList.add('md:flex');
-            }
-            if (collapseIcon) {
-                collapseIcon.classList.remove('rotate-180');
-            }
-
-            // Activar overlay sutil para permitir el clic de cierre externo
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.add('opacity-100'), 10);
         }
     }
-}
 
     // Persistencia y manejo dinámico del redimensionamiento de pantalla
     window.addEventListener('resize', () => {

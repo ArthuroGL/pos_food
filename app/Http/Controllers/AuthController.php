@@ -14,6 +14,7 @@ final class AuthController extends Controller
     {
         return view('auth.registration');
     }
+
     public function registration_post(Request $request)
     {
         $messages = [
@@ -22,9 +23,12 @@ final class AuthController extends Controller
             'password.required' => 'La contraseña es obligatoria.',
             'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
             'password_confirmation.required_with' => 'Debes confirmar la contraseña.',
+            'foto_de_perfil.image' => 'El archivo debe ser una imagen válida.',
+            'foto_de_perfil.mimes' => 'Formatos permitidos: jpeg, png, jpg, svg.',
+            'foto_de_perfil.max' => 'La imagen no debe pesar más de 2MB.',
         ];
-        /* dd($request->all()); */
-        $user = request()->validate([
+
+        request()->validate([
             'name' => 'required|string|max:50',
             'email' => 'required|email|unique:users,email|max:100',
             'password' => 'required|min:6|max:50|different:current_password',
@@ -39,6 +43,7 @@ final class AuthController extends Controller
             'apellido_m' => 'required|string|max:30',
             'phone' => 'required|digits:10',
             'mobile' => 'required|digits:10|different:phone',
+            'foto_de_perfil' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048'
         ], $messages);
 
         $user = new User();
@@ -56,10 +61,24 @@ final class AuthController extends Controller
         $user->alergias = $request->alergias;
         $user->curp = strtoupper($request->curp);
         $user->remember_token = Str::random(50);
-        $user->save();
-        //$user->assignRole($request->is_role); // 'admin', 'cocina' o 'mesero'
 
-        //return redirect()->route('users')->with('success', 'Usuario registrado correctamente.');
+        if ($request->hasFile('foto_de_perfil')) {
+            $extension = $request->file('foto_de_perfil')->getClientOriginalExtension();
+            $fileName = 'avatar_new_' . time() . '_' . uniqid() . '.' . $extension;
+            $pathAvatar = $request->file('foto_de_perfil')->storeAs('avatars', $fileName, 'public');
+            $user->foto_de_perfil = $pathAvatar;
+        }
+
+        $user->save();
+
+        if ($request->is_role == 2) {
+            $user->assignRole('admin');
+        } elseif ($request->is_role == 1) {
+            $user->assignRole('cocina');
+        } else {
+            $user->assignRole('mesero');
+        }
+
         return redirect()->back()->with('success', 'Usuario registrado correctamente.');
     }
 
@@ -67,6 +86,7 @@ final class AuthController extends Controller
     {
         return view('auth.login');
     }
+
     public function login_post(Request $request)
     {
         $user = User::where('email', $request->email)->first();
@@ -78,7 +98,6 @@ final class AuthController extends Controller
         if (!FacadesHash::check($request->password, $user->password)) {
             return redirect()->back()->with('error', 'La contraseña ingresada es incorrecta.');
         }
-
 
         if (Auth::attempt([
             'email' => $request->email,
@@ -97,7 +116,6 @@ final class AuthController extends Controller
 
         return redirect()->back()->with('error', 'Error al iniciar sesión.');
     }
-
 
     public function logout(Request $request)
     {

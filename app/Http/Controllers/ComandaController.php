@@ -13,7 +13,17 @@ class ComandaController extends Controller
     public function index()
     {
         $comandas = Comanda::with('mesa', 'productos')->latest()->get();
-        return view('comandas.index', compact('comandas'));
+
+        // Referencia rápida: Últimas 3 comandas entregadas o finalizadas
+        $ultimasAtendidas = Comanda::with('mesa', 'productos')
+            ->where('estado', 'entregada')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('comandas.index', compact('comandas', 'ultimasAtendidas'));
+
+
     }
     public function create(Request $request)
     {
@@ -156,7 +166,13 @@ class ComandaController extends Controller
     public function vistaCocina()
     {
         $comandas = Comanda::where('estado', 'en_cocina')->get();
-        return view('cocina.index', compact('comandas'));
+        // Referencia rápida para Cocina: Últimas 3 comandas que salieron de cocina (Listas o Entregadas)
+        $ultimasEnCocina = Comanda::with('mesa')
+            ->whereIn('estado', ['lista', 'entregada'])
+            ->latest()
+            ->take(3)
+            ->get();
+        return view('cocina.index', compact('comandas', 'ultimasEnCocina'));
     }
     public function marcarProductoPreparado(Request $request, Comanda $comanda, $productoId)
     {

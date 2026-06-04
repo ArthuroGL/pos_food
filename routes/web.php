@@ -68,4 +68,6 @@ Route::get('/users', [UsersController::class, 'index'])->name('users');
 Route::get('/users/{id}', [UsersController::class, 'show'])->name('users.view');
 Route::delete('users/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
 
+Route::post('/users/{id}/update-avatar', [UsersController::class, 'updateAvatar'])->name('users.updateAvatar');
+
 

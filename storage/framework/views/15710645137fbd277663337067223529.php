@@ -1,6 +1,4 @@
 <?php $__env->startSection('title', 'Panel de Meseros'); ?>
-
-
 <?php $__env->startSection('content_header', 'Panel de Control'); ?>
 <?php $__env->startSection('content'); ?>
 <div class="row">

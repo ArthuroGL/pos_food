@@ -32,7 +32,8 @@ class User extends Authenticatable
         'tipo_sangre',
         'alergias',
         'curp',
-        'is_role'
+        'is_role',
+        'foto_de_perfil'
     ];
 
     /**
@@ -64,5 +65,18 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return "{$this->name} {$this->apellido_p} {$this->apellido_m}";
+    }
+
+    /**
+     * Obtiene la URL de la foto de perfil o una por defecto si no existe.
+     */
+    public function getProfileAvatarUrlAttribute()
+    {
+        if ($this->foto_de_perfil && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->foto_de_perfil)) {
+            return asset('storage/' . $this->foto_de_perfil);
+        }
+
+        // Retorno por defecto según la ilustración que ya usas
+        return asset('images/cook-svgrepo-com.svg');
     }
 }
