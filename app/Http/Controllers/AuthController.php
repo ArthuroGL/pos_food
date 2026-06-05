@@ -102,7 +102,11 @@ final class AuthController extends Controller
         if (Auth::attempt([
             'email' => $request->email,
             'password' => $request->password
-        ], true)) {
+        ], false)) {
+
+            // Forzar la regeneración de la sesión por seguridad
+            $request->session()->regenerate();
+
             if ($user->is_role == '2') {
                 return redirect()->route('admin.dashboard');
             } else if ($user->is_role == '1') {
@@ -120,6 +124,16 @@ final class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+
+        // Limpieza profunda de los datos de la sesión y el token CSRF
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
+    /* public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->route('login');
+    } */
 }

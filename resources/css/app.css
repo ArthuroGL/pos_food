@@ -234,4 +234,13 @@
     .badge-rol-mesero {
         @apply bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md;
     }
+
+    @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.2s ease-out forwards;
+}
 }

@@ -60,6 +60,7 @@ Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])->
 
 //Reportes
 Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
+Route::get('/reportes/exportar', [ReporteController::class, 'exportar'])->name('reportes.exportar');
 /* Route::get('/reportes/exportar', [ReporteController::class, 'exportar'])->name('reportes.exportar'); */
 //users
 Route::get('/usuarios/registro', [AuthController::class, 'registration'])->name('registration');

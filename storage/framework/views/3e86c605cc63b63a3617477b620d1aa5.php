@@ -1,5 +1,5 @@
 <?php
-    $rol = Auth::user()->is_role;
+$rol = Auth::user()->is_role;
 ?>
 
 
@@ -68,33 +68,33 @@
                     <div class="space-y-1.5 max-h-52 overflow-y-auto pr-1 flex-1 scroll-custom">
                         <?php $total = 0; ?>
                         <?php $__empty_2 = true; $__currentLoopData = $comanda->productos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $producto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
-                            <?php
-                                $subtotal = $producto->precio * $producto->pivot->cantidad;
-                                $total += $subtotal;
-                            ?>
-                            <div class="p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 flex justify-between items-center gap-3">
-                                <div class="min-w-0">
-                                    <span class="text-xs font-medium tracking-tight text-slate-700 block truncate">
-                                        
-                                        <strong class="font-mono font-black text-orange-600 text-sm mr-1"><?php echo e($producto->pivot->cantidad); ?>x</strong>
-                                        <?php echo e($producto->nombre); ?>
+                        <?php
+                        $subtotal = $producto->precio * $producto->pivot->cantidad;
+                        $total += $subtotal;
+                        ?>
+                        <div class="p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 flex justify-between items-center gap-3">
+                            <div class="min-w-0">
+                                <span class="text-xs font-medium tracking-tight text-slate-700 block truncate">
+                                    
+                                    <strong class="font-mono font-black text-orange-600 text-sm mr-1"><?php echo e($producto->pivot->cantidad); ?>x</strong>
+                                    <?php echo e($producto->nombre); ?>
 
-                                    </span>
-                                    <?php if($producto->pivot->comentarios): ?>
-                                    <span class="text-[10px] font-bold text-rose-700 bg-rose-50 border border-rose-100 rounded px-1.5 py-0.5 mt-1 inline-block">
-                                        ⚠️ <?php echo e($producto->pivot->comentarios); ?>
+                                </span>
+                                <?php if($producto->pivot->comentarios): ?>
+                                <span class="text-[10px] font-bold text-rose-700 bg-rose-50 border border-rose-100 rounded px-1.5 py-0.5 mt-1 inline-block">
+                                    ⚠️ <?php echo e($producto->pivot->comentarios); ?>
 
-                                    </span>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="text-end shrink-0">
-                                    <span class="text-xs font-mono font-bold text-slate-600 block">$<?php echo e(number_format($subtotal, 2)); ?></span>
-                                </div>
+                                </span>
+                                <?php endif; ?>
                             </div>
+                            <div class="text-end shrink-0">
+                                <span class="text-xs font-mono font-bold text-slate-600 block">$<?php echo e(number_format($subtotal, 2)); ?></span>
+                            </div>
+                        </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
-                            <div class="text-center py-4 text-slate-400 text-xs font-medium border border-dashed border-slate-200 rounded-xl">
-                                No hay productos registrados
-                            </div>
+                        <div class="text-center py-4 text-slate-400 text-xs font-medium border border-dashed border-slate-200 rounded-xl">
+                            No hay productos registrados
+                        </div>
                         <?php endif; ?>
                     </div>
 
@@ -130,7 +130,7 @@
                             <?php echo csrf_field(); ?>
                             <?php echo method_field('PUT'); ?>
                             <button type="submit" name="estado" value="entregada" class="btn-primary w-full py-2.5 justify-center rounded-xl shadow-xs cursor-pointer">
-                                <i class="fas fa-check"></i> Entregar
+                                <i class="fas fa-check"></i> Finalizar
                             </button>
                         </form>
                         <?php endif; ?>
@@ -141,17 +141,17 @@
                         <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1.5">Mover flujo a:</span>
                         <div class="flex p-0.5 bg-slate-200/60 rounded-xl gap-0.5 border border-slate-200">
                             <?php
-                                // Paletas adaptadas para el Switcher de estados internos de la tarjeta
-                                $colores = [
-                                    'pendiente' => 'bg-white text-amber-600 font-black shadow-xs border border-slate-200/50',
-                                    'en_cocina' => 'bg-white text-orange-600 font-black shadow-xs border border-slate-200/50',
-                                    'lista' => 'bg-white text-emerald-600 font-black shadow-xs border border-slate-200/50',
-                                    'cancelada' => 'bg-white text-rose-600 font-black shadow-xs border border-slate-200/50',
-                                ];
+                            // Paletas adaptadas para el Switcher de estados internos de la tarjeta
+                            $colores = [
+                            'pendiente' => 'bg-white text-amber-600 font-black shadow-xs border border-slate-200/50',
+                            'en_cocina' => 'bg-white text-orange-600 font-black shadow-xs border border-slate-200/50',
+                            'lista' => 'bg-white text-emerald-600 font-black shadow-xs border border-slate-200/50',
+                            'cancelada' => 'bg-white text-rose-600 font-black shadow-xs border border-slate-200/50',
+                            ];
 
-                                $botones_estado = ($rol == 2)
-                                    ? ['pendiente', 'en_cocina', 'lista', 'cancelada']
-                                    : ['pendiente', 'en_cocina', 'lista'];
+                            $botones_estado = ($rol == 2)
+                            ? ['pendiente', 'en_cocina', 'lista', 'cancelada']
+                            : ['pendiente', 'en_cocina', 'lista'];
                             ?>
 
                             <?php $__currentLoopData = $botones_estado; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $estado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -160,7 +160,7 @@
                                 <?php echo csrf_field(); ?>
                                 <?php echo method_field('PUT'); ?>
                                 <button type="submit" name="estado" value="<?php echo e($estado); ?>"
-                                        class="w-full py-2 px-1 text-[11px] font-bold tracking-tight rounded-lg border-0 transition-all cursor-pointer text-center whitespace-nowrap <?php echo e($comanda->estado === $estado ? $colores[$estado] : 'bg-transparent text-slate-500 hover:bg-slate-300/40'); ?> ">
+                                    class="w-full py-2 px-1 text-[11px] font-bold tracking-tight rounded-lg border-0 transition-all cursor-pointer text-center whitespace-nowrap <?php echo e($comanda->estado === $estado ? $colores[$estado] : 'bg-transparent text-slate-500 hover:bg-slate-300/40'); ?> ">
                                     <?php echo e(ucfirst(str_replace('_', ' ', $estado))); ?>
 
                                 </button>
